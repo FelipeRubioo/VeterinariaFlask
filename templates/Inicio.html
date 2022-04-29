@@ -1,9 +1,18 @@
+{% extends "base.html" %}
+{% block title %}home{% endblock %}
+{% block head %}
+{{super()}}
+{% endblock %}
+{% block body %}
+<div class="card" style="width: 18rem;">
 
-<!DOCTYPE html>
-
-<html>
-
-<h1>Su correo: {{correo}}</h1>
-
-</html>
-
+    <div class="card-body">
+        <figure>
+            <img src="/static/perro1.jpg" class="card-img-top" alt="...">
+        </figure>
+        <h5 class="card-title">Firulais</h5>
+        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti tempore neque suscipit,
+            repellendus magnam expedita illo est fuga doloribus. Veritatis?</p>
+        <a href="/pet-info" class="btn btn-primary">Más Informacion</a>
+    </div>
+{% endblock %}
