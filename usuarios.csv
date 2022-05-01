@@ -1,2 +1,4 @@
 id,correo,usuario,secreto,tipo
-1,francisco.devson@gmail.com,elpatoninja,pato123,cliente
+1,francisco.devson@gmail.com,elpatoninja,pato123,usuario
+2,diego.cardenas@mascotita.mx,diego_x,diego123,admin
+3,asdf@asdf.com,asdf,asdf123,cliente

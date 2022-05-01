@@ -3,6 +3,11 @@
 {% block head %}
 {{super()}}
 {% endblock %}
+{% block nav %}
+{% for opcion, ruta in menu.items() %}
+<a class="nav-item nav-link" href="{{ruta}}">{{opcion}}</a>
+{% endfor %}
+{% endblock %}
 {% block body %}
 <div class="card" style="width: 18rem;">
 

@@ -49,30 +49,28 @@
 <body>
     
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <a class="navbar-brand" href="#"><img src="/static/logo.PNG" width="60" height="60" alt="">
-            Mascotita
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#">Tus mascotas <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#">Servicios</a>
-            <a class="nav-item nav-link" href="#">Acerca de</a>
-            <a class="nav-item nav-link" href="#">Tienda</a>
-            <a class="nav-item nav-link disabled" href="#">Profesional</a>
-          </div>
-        </div>
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-light" type="submit">Search</button>
-          </form>
-          {% if 'usuario' in session %}
-          <a href="/logout" class="btn btn-outline-light logout-btn">Log out</a>
-          {% endif %}
-      </nav>
+ <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <a class="navbar-brand" href="#"><img src="/static/logo.PNG" width="60" height="60" alt="">
+        Mascotita
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        {% block nav %}
+        {% endblock %}
+      </div>
+    </div>
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+      </form>
+      {% if 'usuario' in session %}
+      <a href="/logout" class="btn btn-outline-light logout-btn">Log out</a>
+      {% endif %}
+  </nav>
+   
   {% block body %}
   {% endblock %}
 </body>

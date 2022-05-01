@@ -1,3 +1,4 @@
+from pickle import TRUE
 from flask import Flask, render_template,request,redirect,session
 from funciones import lee_diccionario_csv
 #from passlib.hash import sha256_crypt
@@ -5,6 +6,26 @@ from funciones import lee_diccionario_csv
 app = Flask(__name__)
 app.secret_key = "asdfvfñfes7u2nairfn"
 diccionario_usuarios = lee_diccionario_csv('usuarios.csv')
+
+# Creamos el diccionario del cliente
+dcliente = {'Agregar cita':'/citas',
+            'Citas anteriores':'/anteriores'
+}
+
+# Creamos el diccionario usuario haciendo una copia del diccionario cliente con 2 valores extra
+dusuario = dcliente.copy()
+dusuario['Receta'] = '/recetas'
+dusuario['Procedimiento'] = '/procedimiento'
+
+# Creamos el diccionario admin haciendo una copia del diccionario usuario con 2 valores extra
+dadmin = dusuario.copy()
+dadmin['Usuarios'] = '/usuarios'
+dadmin['Informes'] = '/informes'
+
+# Ruteamos cada uno  de los diccionarios
+dmenus = {'cliente':dcliente,
+          'usuario':dusuario,
+          'admin':dadmin,}
 
 @app.route("/")
 def index():
@@ -27,12 +48,12 @@ def login():
                 if (password_db == password_forma):
                     session['usuario'] = usuario
                     session['logged_in'] = True
-                    if 'ruta' in session:
-                        ruta = session['ruta']
-                        session['ruta'] = None
-                        return redirect(ruta)
-                    else:
-                        return redirect("/inicio")
+                    # if 'ruta' in session:
+                    #     ruta = session['ruta']
+                    #     session['ruta'] = None
+                    #     return redirect(ruta)
+                    # else:
+                    return redirect(f"/inicio/{usuario}")
                 else:
                     msg = f'El password de {usuario} no corresponde'
                     return render_template('signin.html',mensaje=msg)
@@ -48,10 +69,16 @@ def logout():
         return redirect("/")
     
 #Inicio o vista del usuario
-@app.route('/inicio', methods = ['GET'])
-def Inicio():
-    if request.method == 'GET':
-        return render_template('inicio.html')
+@app.route('/inicio/<usuario>', methods = ['GET'])
+def Inicio(usuario):
+    if usuario in diccionario_usuarios and session:
+        if request.method == 'GET':
+            tipo = diccionario_usuarios[usuario]['tipo']
+            menu = dmenus[tipo]
+            #print(menu)
+            return render_template('inicio.html', menu=menu)
+    else:
+        return render_template('error-404.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
