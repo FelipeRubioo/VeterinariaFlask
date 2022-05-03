@@ -1,15 +1,17 @@
 from pickle import TRUE
 from flask import Flask, render_template,request,redirect,session
-from funciones import lee_diccionario_csv
+from funciones import *
 #from passlib.hash import sha256_crypt
 
 app = Flask(__name__)
 app.secret_key = "asdfvfñfes7u2nairfn"
 diccionario_usuarios = lee_diccionario_csv('usuarios.csv')
+lista_mascotas = crea_lista_mascotas('mascotas.csv')
 
 # Creamos el diccionario del cliente
 dcliente = {'Agregar cita':'/citas',
-            'Citas anteriores':'/anteriores'
+            'Citas anteriores':'/anteriores',
+            'Mis mascotas':'/mascotas'
 }
 
 # Creamos el diccionario usuario haciendo una copia del diccionario cliente con 2 valores extra
@@ -80,6 +82,15 @@ def Inicio(usuario):
     else:
         return render_template('error-404.html')
 
+#mascotas del cliente
+@app.route('/mascotas', methods = ['GET','POST'])
+def mascotas():
+    if request.method == 'GET':
+        return render_template('mascotas.html',mascotas = lista_mascotas, usuario = session['usuario'])
+    elif request.method == 'POST':
+        #funcion para eliminar mascota
+        return render_template('mascotas.html',mascotas = lista_mascotas, usuario = session['usuario'])
+        
 if __name__ == "__main__":
     app.run(debug=True)
 
