@@ -18,12 +18,18 @@
         <tbody>
             {% for mascota in mascotas %}
                 {% if mascota.propietario == usuario%}
-                <tr>
-                    <th scope="row">{{mascota.nombre}}</th>
-                    <td> {{ mascota.raza }} </td>
-                    <td> {{ mascota.sexo }}</td>
-                    <td><button type="submit" class="btn btn-danger" onclick="deleteRow(this)">Eliminar</button><br> </td> 
-                </tr>
+                <form action='' method='POST'>
+                    <tr>
+                        <th scope="row">{{mascota.nombre}}</th>
+                        <td> {{ mascota.raza }} </td>
+                        <td> {{ mascota.sexo }}</td>
+                        <!-- los inputs del form son invisibles, se toma el nombre del propietario y de la mascota para identificar la fila-->
+                        <input type="hidden" name="propietario" value= {{ mascota.propietario }}/>
+                        <input type="hidden" name="nombre" value= {{ mascota.nombre }}/>
+                        <td><button type="submit" class="btn btn-danger" onclick="deleteRow(this)">Eliminar</button><br> </td> 
+                    </tr>
+                </form>
+                
                 {% endif %}               
             {% endfor %}
             
@@ -32,7 +38,16 @@
     <script>
         function deleteRow(r){
             var i = r.parentNode.parentNode.rowIndex;
+            var propietaro = document.getElementById("tablaMascotas").rows[i].cells['propietario']
+            var nombre = document.getElementById("tablaMascotas").rows[i].cells['nombre']
             document.getElementById("tablaMascotas").deleteRow(i)
+            $.ajax({
+                    type: "POST",
+                    url: "funciones.py",
+                    data: { param: text}
+                    }).done(function( o ) {
+                            // do something
+                        });
         }
     </script>
 {% endblock %}

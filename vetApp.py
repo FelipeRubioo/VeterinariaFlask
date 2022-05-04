@@ -1,4 +1,3 @@
-from pickle import TRUE
 from flask import Flask, render_template,request,redirect,session
 from funciones import *
 #from passlib.hash import sha256_crypt
@@ -8,26 +7,6 @@ app.secret_key = "asdfvfñfes7u2nairfn"
 diccionario_usuarios = lee_diccionario_csv('usuarios.csv')
 lista_mascotas = crea_lista_mascotas('mascotas.csv')
 
-# Creamos el diccionario del cliente
-dcliente = {'Agregar cita':'/citas',
-            'Citas anteriores':'/anteriores',
-            'Mis mascotas':'/mascotas'
-}
-
-# Creamos el diccionario usuario haciendo una copia del diccionario cliente con 2 valores extra
-dusuario = dcliente.copy()
-dusuario['Receta'] = '/recetas'
-dusuario['Procedimiento'] = '/procedimiento'
-
-# Creamos el diccionario admin haciendo una copia del diccionario usuario con 2 valores extra
-dadmin = dusuario.copy()
-dadmin['Usuarios'] = '/usuarios'
-dadmin['Informes'] = '/informes'
-
-# Ruteamos cada uno  de los diccionarios
-dmenus = {'cliente':dcliente,
-          'usuario':dusuario,
-          'admin':dadmin,}
 
 @app.route("/")
 def index():
@@ -71,27 +50,37 @@ def logout():
         return redirect("/")
     
 #Inicio o vista del usuario
+@app.route('/inicio/')
 @app.route('/inicio/<usuario>', methods = ['GET'])
-def Inicio(usuario):
+def Inicio(usuario=''):
     if usuario in diccionario_usuarios and session:
         if request.method == 'GET':
             tipo = diccionario_usuarios[usuario]['tipo']
-            menu = dmenus[tipo]
-            #print(menu)
+            usuario = diccionario_usuarios[usuario]['usuario']
+            menu = crea_menu(tipo,usuario)
+            print(menu)
             return render_template('inicio.html', menu=menu)
+
     else:
         return render_template('error-404.html')
 
-#mascotas del cliente
-@app.route('/mascotas', methods = ['GET','POST'])
-def mascotas():
-    if request.method == 'GET':
-        return render_template('mascotas.html',mascotas = lista_mascotas, usuario = session['usuario'])
-    elif request.method == 'POST':
-        #funcion para eliminar mascota
-        return render_template('mascotas.html',mascotas = lista_mascotas, usuario = session['usuario'])
-        
+#Mascotas del cliente
+@app.route('/mascotas/')
+@app.route('/mascotas/<usuario>', methods = ['GET','POST'])
+def mascotas(usuario='lista'):
+    if usuario in diccionario_usuarios and session:
+        if request.method == 'GET':
+            usuario = diccionario_usuarios[usuario]['usuario']
+            return render_template('mascotas.html',mascotas = lista_mascotas, usuario = usuario)
+        elif request.method == 'POST':
+            #se elimina mascota y se refresca pagina
+            propietario = request.form['propietario']
+            nombre = request.form['nombre']
+            eliminaMascota(propietario,nombre)
+            return render_template('mascotas.html',mascotas = lista_mascotas, usuario = session['usuario'])
+
+    else:
+        return render_template('error-404.html')
+
 if __name__ == "__main__":
     app.run(debug=True)
-
-   
