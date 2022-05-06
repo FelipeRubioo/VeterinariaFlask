@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block head %}
+{{super()}}
+{% endblock %}
+{% block body %}
+<div>
+    <h1>Agrega a tu mascota</h1>
+    <h2>{{mensaje}}</h2>
+</div>
+<div>
+    <form action='' method='POST'>
+        <div>
+            <label for="nombre">Nombre:</label><br>
+            <input type="text" id="nombre" name="nombre" value=""><br>
+        </div>
+        <div>
+            <label for="raza">Raza:</label><br>
+            <input type="text" id="raza" name="raza" value=""><br>
+        </div>
+            <label>Sexo:</label><br>
+            <input type="checkbox" id="macho" name="macho" value="macho" onchange="obtenSexo(this)">
+            <label for="macho">Macho</label><br>
+
+            <input type="checkbox" id="hembra" name="hembra" value="hembra" onchange="obtenSexo(this)">
+            <label for="hembra">Hembra</label><br>
+
+            <input type="text" id="sexo" name="sexo" value="">
+            <input type="submit" value="Agregar" name="agregar">
+    </form>
+
+    <script>
+
+        function obtenSexo(check){
+            //si uno esta checked, el otro no....se actualiza el valor de sexo
+            var sexo = ""
+            if(check.value == "macho"){
+                if(check.checked == true){
+                    document.getElementById("hembra").checked = false
+                }
+            }
+            if(check.value == "hembra"){
+                if(check.checked == true){
+                    document.getElementById("macho").checked = false           
+                }
+            }
+            sexo = check.value
+            document.getElementById("sexo").value = sexo
+        }
+    </script>
+</div>
+{% endblock %}

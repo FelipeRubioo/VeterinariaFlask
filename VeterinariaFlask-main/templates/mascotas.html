@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}mascotas{% endblock %}
+{% block head %}
+{{super()}}
+{% endblock %}
+{% block body %}
+    
+<h1>Listado de mascotas</h1>
+    <table class="table table-info table-striped" id="tablaMascotas">
+        <thead>
+            <tr>
+                <th scope="col">propietario</th>
+                <th scope="col">nombre</th>
+                <th scope="col">raza</th>
+                <th scope="col">sexo</th>
+                <th scope="col">eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mascota in mascotas %}
+                {% if mascota.propietario == usuario%}
+               
+                    <tr>
+                        <th scope="row" id="{{mascota.propietario}}">{{mascota.propietario}} </th>
+                        <td id="{{mascota.nombre}}"> {{mascota.nombre}}</td>
+                        <td> {{ mascota.raza }} </td>
+                        <td> {{ mascota.sexo }}</td>
+                        <td><button type="button" class="btn btn-danger" onclick="deleteRow(this)" id="botEliminar" value="{{mascota.nombre}}">Eliminar</button><br> </td> 
+                    </tr>
+                        
+                {% endif %}               
+            {% endfor %}
+            <!-- los inputs del form son invisibles, se toma el nombre del propietario y de la mascota para identificar la fila-->
+            <form action='' method='POST'>
+                <input type="hidden" name="propietario" id="propietario" value= "">
+                <input type="hidden" name="nombre" id ="nombre" value= "">
+                <input type="submit" type="hidden" name="submit" value="subir" id="botSubmit" >
+            </form>
+            <a href="/AgregarMascota" class="btn btn-primary">Añadir Mascota</a>
+            
+        </tbody>
+    </table>
+    <script>
+        function deleteRow(r){
+            var fila = r.value
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("nombre").value = fila
+            document.getElementById('botSubmit').click();
+            
+            document.getElementById("tablaMascotas").deleteRow(i)
+
+        }
+    </script>
+{% endblock %}
